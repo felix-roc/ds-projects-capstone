@@ -1,0 +1,15 @@
+jupyterlab
+ipywidgets
+matplotlib
+numpy
+pandas
+seaborn
+plotly
+dash
+jupyterlab-dash
+scikit-learn
+statsmodels
+tensorflow
+tensorflow-metal
+keras
+xgboost
