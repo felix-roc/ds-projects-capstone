@@ -9,7 +9,7 @@ dash
 jupyterlab-dash
 scikit-learn
 statsmodels
-tensorflow
+tensorflow-macos
 tensorflow-metal
 keras
 xgboost
