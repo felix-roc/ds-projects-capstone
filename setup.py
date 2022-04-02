@@ -4,7 +4,7 @@ setup(
     name='src',
     packages=find_packages(),
     version='1.0.0',
-    description='HDD anomaly detection.',
-    author='felix',
+    description='HDD predictive maintenance',
+    author='Felix',
     license='MIT',
 )
