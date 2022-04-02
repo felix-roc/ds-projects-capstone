@@ -174,6 +174,27 @@ def load_preprocess_testdata(filename="ST4000DM000_history_total", path=os.getcw
     #print("-----------------------------------------------------")
     return df
 
+def preprocess_testdata(df, days=30) -> pd.DataFrame:
+    """Preprocess drive stats data
+
+    Args:
+        filename (str, optional): Name of the csv file. Defaults to "ST4000DM000_history".
+        path (_type_, optional): Path of the repo. Defaults to os.getcwd().
+
+    Returns:
+        pd.DataFrame: Dataframe with the drive stats data
+    """
+    #print("Preprocessing")
+    #print("Dropping unused columns")
+    df = drop_cols(df)
+    #print("Dropping missings")
+    df = drop_missing_rows(df)
+    #print("Dropping dublicated observations")
+    df = drop_duplicate_rows(df)
+    #print("Preprocessing finished")
+    #print("-----------------------------------------------------")
+    return df
+    
 def save_preprocessed_data(filename="ST4000DM000_history_total", path=os.getcwd()):
     """Load and preprocess the drive stats data and store the result in a csv file
 
