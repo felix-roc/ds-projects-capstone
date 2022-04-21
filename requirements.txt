@@ -6,7 +6,7 @@ pandas
 seaborn
 plotly
 dash
-jupyterlab-dash
+jupyter-dash
 scikit-learn
 statsmodels
 tensorflow-macos
