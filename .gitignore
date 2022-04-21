@@ -2,6 +2,9 @@
 
 data/
 
+# MLFlow Tracking URI
+.mlflow_uri
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
