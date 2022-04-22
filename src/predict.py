@@ -17,10 +17,9 @@ def __get_data():
         _type_: X_test
     """
     X_test = load_preprocess_testdata(
-                days=30,
-                filename="ST4000DM000_history_total",
-                path=os.getcwd()
-                )
+        days=30,
+        filename="ST4000DM000_history_total",
+        path=os.getcwd())
     return X_test
 
 

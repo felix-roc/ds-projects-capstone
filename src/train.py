@@ -67,12 +67,10 @@ def __get_data():
     X, y = load_preprocess_data(
         days=30,
         filename="ST4000DM000_history_total",
-        path=os.getcwd()
-        )
+        path=os.getcwd())
     logger.info("Train-test splitting")
     X_train, X_test, y_train, y_test = train_test_splitter(
-        X, y, test_size=0.30, random_state=RSEED
-        )
+        X, y, test_size=0.30, random_state=RSEED)
     logger.info("Feature engineering on train")
     # Create instance of our preprocessor
     preprocessor = hdd_preprocessor(days=30, trigger=0.05)
@@ -92,16 +90,14 @@ def run_training():
     # Scaling pipeline
     scaling_pipe = Pipeline([
         ('scaler_log', log_transformer(offset=1)),
-        ('scaler_minmax ', MinMaxScaler()),
-        ])
+        ('scaler_minmax ', MinMaxScaler())])
     # ANN model, wrapped for use in sklearn
     ann_classifier = KerasClassifier(
         build_fn=__create_ann_model__,
         epochs=150,
         batch_size=40000,
         class_weight={0: 1.0, 1: 0.4*len(y_train)/y_train.sum()},
-        verbose=0,
-        )
+        verbose=0)
     # specify the model type
     ann_classifier._estimator_type = "classifier"
     # XGBoost model
@@ -118,10 +114,8 @@ def run_training():
             min_child_weight=2,
             reg_lambda=0.7,
             reg_alpha=1,
-            use_label_encoder=False,
-            )),
-        ('ann', ann_classifier),
-        ]
+            use_label_encoder=False)),
+        ('ann', ann_classifier)]
     # Stacking
     clf = StackingClassifier(
         estimators=estimators,
@@ -131,8 +125,7 @@ def run_training():
     # Include the scaling pipeline
     model = Pipeline([
         ('scaling', scaling_pipe),
-        ('stacking', clf),
-        ])
+        ('stacking', clf)])
     logger.info("Fitting in progress")
     model.fit(X_train, y_train)
     # logger.info("Pickle")

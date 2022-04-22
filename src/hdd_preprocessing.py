@@ -36,8 +36,7 @@ def calculate_target(df_in, days=30):
     # Assign failure dates
     date_failure = (df['serial_number']
                     .map(failure.set_index('serial_number')
-                    ['date'])
-                    )
+                    ['date']))
     # Days to fail as int
     countdown = (date_failure - df.date).dt.days
     # Remove observations with negative countdown (repaired drives) and with
@@ -64,8 +63,7 @@ def train_test_splitter(X, y, test_size=0.3, random_state=42) -> pd.DataFrame:
     drives = pd.Series(X.serial_number.unique(), name="HDD")
     # Random sampling of drives
     drives_test = drives.sample(int(test_size * len(drives)),
-                                random_state=random_state
-                                )
+                                random_state=random_state)
     # Remaining drives end up in the train set
     drives_train = drives.drop(drives_test.index, axis=0)
     # Create split X and y
@@ -121,8 +119,7 @@ def drop_duplicate_rows(df_in) -> pd.DataFrame:
         pd.DataFrame: Drive stats data with removed rows
     """
     df = (df_in.copy()
-          .drop_duplicates(keep='first', subset=["serial_number", "date"])
-          )
+          .drop_duplicates(keep='first', subset=["serial_number", "date"]))
     return df
 
 
@@ -205,9 +202,9 @@ def load_preprocess_testdata(filename="ST4000DM000_history_total",
     return df
 
 
-def save_preprocessed_data(filename="ST4000DM000_history_total",
-                           path=os.getcwd()
-                           ):
+def save_preprocessed_data(
+        filename="ST4000DM000_history_total",
+        path=os.getcwd()):
     """Load and preprocess the drive stats data and store the result
     in a csv file.
 
@@ -231,5 +228,4 @@ def save_preprocessed_data(filename="ST4000DM000_history_total",
 if __name__ == "__main__":
     df, y = load_preprocess_data(days=30,
                                  filename="ST4000DM000_history_total",
-                                 path=os.getcwd()
-                                 )
+                                 path=os.getcwd())
