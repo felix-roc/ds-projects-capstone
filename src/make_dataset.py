@@ -1,4 +1,3 @@
-import pandas as pd
 from src.train import __get_data
 
 X_train, X_test, y_train, y_test = __get_data()
