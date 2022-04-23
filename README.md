@@ -1,4 +1,10 @@
-# Deployment of the model to Heroku
+# ds-projects-capstone
+
+Capstone project of the neue fische bootcamp on
+
+***Predictive maintenance of HDDs in data centers***.
+
+## Content
 
 In this branch you can find the container that is used to deploy the model to Heroku. The API is running at https://hdd-predicitve-maintenance-api.herokuapp.com.
 
