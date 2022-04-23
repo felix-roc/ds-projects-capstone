@@ -1,12 +1,10 @@
 from logging import getLogger
-import pandas as pd
 import warnings
 import os
 from mlflow.sklearn import save_model
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
-from keras import optimizers
 from keras.wrappers.scikit_learn import KerasClassifier
 
 from src.hdd_preprocessing import load_preprocess_data, train_test_splitter
@@ -23,11 +21,14 @@ RSEED = 42
 warnings.filterwarnings("ignore")
 logger = getLogger(__name__)
 
+
 def __create_ann_model__(input_dim=19):
-    """Build function to construct the artificial neural network. This function is needed by the KerasWrapper.
+    """Build function to construct the artificial neural network. This
+    function is needed by the KerasWrapper.
 
     Args:
-        input_dim (int, optional): Input dimension of the first layer (number of features). Defaults to 19.
+        input_dim (int, optional): Input dimension of the first layer (number
+        of features). Defaults to 19.
 
     Returns:
         _type_: The model
@@ -35,28 +36,41 @@ def __create_ann_model__(input_dim=19):
     # initiate the instance
     model = Sequential()
     # layers
-    model.add(Dense(units = 30, kernel_initializer = 'uniform', activation = 'relu', input_dim=input_dim))
+    model.add(Dense(
+        units=30,
+        kernel_initializer='uniform',
+        activation='relu',
+        input_dim=input_dim))
     model.add(Dropout(0.2))
-    model.add(Dense(units = 30, kernel_initializer = 'uniform', activation = 'relu'))
+    model.add(Dense(
+        units=30,
+        kernel_initializer='uniform',
+        activation='relu'))
     model.add(Dropout(0.2))
-    model.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+    model.add(Dense(
+        units=1,
+        kernel_initializer='uniform',
+        activation='sigmoid'))
     # compiling the ANN
-    model.compile(optimizer = 'adam', 
-                loss = 'binary_crossentropy', 
-                metrics = ['Recall', 'Precision'])
+    model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['Recall', 'Precision'])
     return model
-     
+
+
 def __get_data():
-    """Load and preprocess the data for the modeling. The data is loaded and split into 
-    train and test datasets. Afterward, we preprocess the data and create the features 
-    for both datasets.
+    """Load and preprocess the data for the modeling. The data is loaded and
+    split into train and test datasets. Afterward, we preprocess the data and
+    create the features for both datasets.
 
     Returns:
         _type_: Train and test datasets.
     """
     logger.info("Loading and preprocessing data")
-    X, y = load_preprocess_data(   days=30, filename="ST4000DM000_history_total", 
-                                    path=os.getcwd())
+    X, y = load_preprocess_data(
+        days=30,
+        filename="ST4000DM000_history_total",
+        path=os.getcwd())
     logger.info("Train-test splitting")
     X_train, X_test, y_train, y_test = train_test_splitter(
         X, y, test_size=0.30, random_state=RSEED
@@ -69,8 +83,10 @@ def __get_data():
     X_test = preprocessor.transform(X_test)
     return X_train, X_test, y_train, y_test
 
+
 def run_training():
-    """Load the data, construct the model and fit it. Save the model for deployment.
+    """Load the data, construct the model and fit it. Save the model for
+    deployment.
     """
     logger.info("Getting the data")
     X_train, X_test, y_train, y_test = __get_data()
@@ -81,33 +97,37 @@ def run_training():
                 ('scaler_minmax ', MinMaxScaler()),
                 ])
     # ANN model, wrapped for use in sklearn
-    ann_classifier = KerasClassifier(build_fn=__create_ann_model__, 
-                        epochs=150,
-                        batch_size= 40000,
-                        class_weight={0 : 1.0, 1 : 0.4*len(y_train)/y_train.sum()},
-                        verbose=0,
-                        )
+    ann_classifier = KerasClassifier(
+        build_fn=__create_ann_model__,
+        epochs=150,
+        batch_size=40000,
+        class_weight={0: 1.0, 1: 0.4*len(y_train)/y_train.sum()},
+        verbose=0,
+        )
     # specify the model type
     ann_classifier._estimator_type = "classifier"
     # XGBoost model
     estimators = [
-        ('xgb', XGBClassifier( objective="binary:logistic",
-                    scale_pos_weight=0.4*len(y_train)/y_train.sum(), # ratio of number of negative class to the positive class
-                    colsample_bytree=0.4, # 1, Number of features used by tree, lower to regularize
-                    subsample=0.3, # 1, ratio of the training instances used, lower to regularize
-                    eta=0.01, # 0.3, learning rate, lower values to regularize
-                    gamma=1, # 0, regularization parameter, higher to regularize
-                    max_depth=6, # 6, maximum tree depth
-                    n_estimators=50 , # 100, number of trees to grow
-                    min_child_weight=2 , # 1, minimum sum of instance weight needed in a leaf, higher to regularize
-                    reg_lambda=0.7, # 1, L2 regularization
-                    reg_alpha=1, # 0, L1 regularization
-                    use_label_encoder=False,
-                    )),
-        ('ann', ann_classifier),
-        ]
+        ('xgb', XGBClassifier(
+            objective="binary:logistic",
+            scale_pos_weight=0.4*len(y_train)/y_train.sum(),
+            colsample_bytree=0.4,
+            subsample=0.3,
+            eta=0.01,
+            gamma=1,
+            max_depth=6,
+            n_estimators=50,
+            min_child_weight=2,
+            reg_lambda=0.7,
+            reg_alpha=1,
+            use_label_encoder=False)),
+        ('ann', ann_classifier)]
     # Stacking
-    clf = StackingClassifier(estimators = estimators, final_estimator=LogisticRegression(class_weight=0.4*len(y_train)/y_train.sum()), n_jobs=-1)
+    clf = StackingClassifier(
+        estimators=estimators,
+        final_estimator=LogisticRegression(
+            class_weight=0.4*len(y_train)/y_train.sum()),
+        n_jobs=-1)
     # Include the scaling pipeline
     model = Pipeline([
                 ('scaling', scaling_pipe),
@@ -124,12 +144,14 @@ def run_training():
     path = "models/deployment_stacked"
     save_model(sk_model=clf, path=path)
 
+
 if __name__ == "__main__":
     import logging
 
     logger = logging.getLogger()
     logging.basicConfig(format="%(asctime)s: %(message)s")
-    logging.getLogger("pyhive").setLevel(logging.CRITICAL)  # avoid excessive logs
+    # avoid excessive logs
+    logging.getLogger("pyhive").setLevel(logging.CRITICAL)
     logger.setLevel(logging.INFO)
 
     run_training()
