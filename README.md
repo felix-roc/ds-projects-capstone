@@ -13,7 +13,7 @@ Predicting health of hard drive disks (HDDs) in data centers allows to maximize 
 This repository contains three branches.
 - The `main` branch contains
   - the data
-  - `notebooks` for [EDA](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-EDA.ipynb), [anomaly detection](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-EDA.ipynb), [modeling](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-EDA.ipynb) and [error analysis](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-EDA.ipynb)
+  - `notebooks` for [EDA](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-EDA.ipynb), [anomaly detection](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-anomaly.ipynb), [baseline model](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-baseline.ipynb), [feature engineering](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-features.ipynb) and [modeling](https://github.com/felix-roc/ds-projects-capstone/blob/main/notebooks/felix-modeling.ipynb)
   - refactored code in the `src` folder
   - images, logos and the [stakeholder presentations](https://github.com/felix-roc/ds-projects-capstone/blob/main/reports/presentation/To%20fail%20or%20not%20to%20fail%20-%20That's%20the%20question.pdf) in the `presentation` folder
   - trained `models` for deployment
