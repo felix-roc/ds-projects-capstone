@@ -1,6 +1,6 @@
 # Deployment of the model to Heroku
 
-In this branch you can find the container that is used to deploy the model to Heroku. The API is running at https://hdd-predictive-maintenance.herokuapp.com
+In this branch you can find the container that is used to deploy the model to Heroku. The API is running at https://hdd-predicitve-maintenance-api.herokuapp.com.
 
 ## Local testing
 
