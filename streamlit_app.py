@@ -86,11 +86,11 @@ with container_intro:
     st.write(
         "Please click on the Predict button to see the results of the"
         "classification.")
-    st.header('')
+    # st.header('')
 
 
 # Test Data Container
-with container_intro:
+with container_test_data:
     st.markdown('**This is how a random sample of our raw data looks like:**')
     data = pd.read_csv('file/test_data_final.csv')
     serial = data.sample(1)['serial_number'].to_list()[0]
@@ -98,7 +98,7 @@ with container_intro:
     data.sort_values('date', inplace=True, ascending=False)
     st.write(data.head(5))
 
-    #predicting on the prepared test data df
+    # predicting on the prepared test data df
     if st.button('Predict on our provided test data'):
         y_pred = predict_rating(url, data)
         y_pred = y_pred.split(':')[1]
