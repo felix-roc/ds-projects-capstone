@@ -7,7 +7,7 @@ import json
 import warnings
 warnings.filterwarnings('ignore')
 
-# define containers
+# Define containers
 container_intro = st.container()
 container_test_data = st.container()
 container_upload_data = st.container()
@@ -34,23 +34,24 @@ def predict_rating(df, url=url):
     return y_pred
 
 
-# function for loading some data from the test data
-@st.cache
-def load_data(file):
-    """Load the stored test data
+# # function for loading some data from the test data
+# @st.cache
+# def load_data(file):
+#     """Load the stored test data and sample something.
+#     Not sure what this function does though and not using it?
 
-    Args:
-        file (_type_): filename
+#     Args:
+#         file (_type_): filename
 
-    Returns:
-        _type_: _description_
-    """
-    data = pd.read_csv(file)
-    model_pred = data.sample(30)
-    return model_pred
+#     Returns:
+#         _type_: _description_
+#     """
+#     data = pd.read_csv(file)
+#     model_pred = data.sample(30)
+#     return model_pred
 
 
-# SIDEBAR
+# Sidebar
 st.sidebar.title('Predictive maintenance of HDDs in data centers')
 st.sidebar.image('jpg/Guardians_memory.jpg')
 st.sidebar.subheader("Guardians of the Memory", )
@@ -76,21 +77,19 @@ st.sidebar.header('')
 st.sidebar.text('Ⓒ 2022. All rights Reserved.')
 
 
-# INTRO CONTAINER
+# Intro Container
 with container_intro:
-    # Writing App Title and Description
     st.title('How long will your hard drive last?')
     st.write(
         "This is a web app to predict if a HDD drive will fail or not fail in"
-        " the next 30 days. \ "
+        " the next 30 days.")
+    st.write(
         "Please click on the Predict button to see the results of the"
-        "classification. \ "
-        )
+        "classification.")
     st.header('')
 
 
-# TEST DATA CONTAINER
-# load test sample from our provided test
+# Test Data Container
 with container_intro:
     st.markdown('**This is how a random sample of our raw data looks like:**')
     data = pd.read_csv('file/test_data_final.csv')
@@ -114,13 +113,12 @@ with container_intro:
     st.header('')
 
 
-
-#UPLOAD CONTAINER
-#subheader for uploading own data
+# UPLOAD CONTAINER
+# subheader for uploading own data
 with container_upload_data:
     st.image('jpg/HDD.jpg')
     st.subheader('Want to predict for your own hard drive?')
-    # with expander_upload_data: 
+    # with expander_upload_data:
     #upload a file
     dataframe_upload = None
     uploaded_file = st.file_uploader("Choose your file for your own hard drive to upload. Make sure it's only data for the model 'ST4000DM000' from Seagate.", help= 'Drag your files here')
