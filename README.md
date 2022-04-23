@@ -6,7 +6,7 @@ Capstone project of the neue fische bootcamp on
 
 ## Introduction
 
-Predicting health of hard drive disks (HDDs) in data centers allows to maximize HDD usage and ensures data availability. We explore the [S.M.A.R.T. characteristics](https://en.wikipedia.org/wiki/S.M.A.R.T.) of HDDs using anomaly detection methods and develop a classification model that predicts imminent HDD failure. A scalable model pipeline powers the customer dashboard.
+Predicting health of hard drive disks (HDDs) in data centers allows to maximize HDD usage and ensures data availability. We explore the [S.M.A.R.T. characteristics](https://en.wikipedia.org/wiki/S.M.A.R.T.) of HDDs using anomaly detection methods and develop a classification model that predicts imminent HDD failure. A [scalable model pipeline](https://hdd-predicitve-maintenance-api.herokuapp.com) powers the [customer dashboard](https://share.streamlit.io/felix-roc/ds-projects-capstone/deployment_streamlit).
 
 ## Content
 
@@ -19,6 +19,7 @@ This repository contains three branches.
   - trained `models` for deployment
 - The `deployment-model` branch contains a container for model deployment to [Heroku](https://www.heroku.com). The model is interfaced via an [API](https://hdd-predicitve-maintenance-api.herokuapp.com) using FastAPI.
 - The `deployment-dashboard` branch contains a Plotly Dash dashboard that uses predictions obtained from the deployed model. This branch is also [deployed to Heroku](https://www.heroku.com).
+- The `deployment-streamlit` branch contains the Streamlit app with a [dashboard](https://share.streamlit.io/felix-roc/ds-projects-capstone/deployment_streamlit) to get predictions on sample data and upload custom data.
 
 ## Data
 
