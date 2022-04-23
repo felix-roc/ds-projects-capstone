@@ -85,7 +85,7 @@ with container_test_data:
 
     # predicting on the prepared test data
     if st.button('Predict on our provided test data'):
-        y_pred = predict_rating(url, data)
+        y_pred = predict_rating(data, url)
         y_pred = y_pred.split(':')[1]
         y_pred = y_pred.split(',')[0]
         if y_pred == "false":
@@ -117,7 +117,7 @@ with container_upload_data:
 
         if st.button('Predict'):
             # Predict on own data using API
-            y_pred = predict_rating(url, dataframe_upload)
+            y_pred = predict_rating(dataframe_upload, url)
             # Process the returned predictions
             y_pred = y_pred.split(':')[1]
             y_pred = y_pred.split(',')[0]
