@@ -42,7 +42,7 @@ def run_predict():
     X_test = __get_data()
     logger.info("Feature engineering on test")
     preprocessor = hdd_preprocessor(days=30, trigger=0.05)
-    # X_test = preprocessor.fit_transform(X_test)  # Nothing saved in the fit!
+    X_test = preprocessor.fit_transform(X_test)  # Nothing saved in the fit
     logger.info("Prediction in progress")
     y_proba = model.predict_proba(X_test)
     return y_proba > 0.501
