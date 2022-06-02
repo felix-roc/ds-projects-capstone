@@ -63,7 +63,7 @@ server = app.server
 # X_test = __get_data()
 # y_proba = __get_predictions(model, X_test)
 
-path = "data/processed/"
+path = "data/"
 X_test = pd.read_csv(path + "X_test.csv")
 y_test = pd.read_csv(path + "y_test.csv")
 y_pred = pd.read_csv(path + "y_pred.csv")
