@@ -13,7 +13,7 @@ container_test_data = st.container()
 container_upload_data = st.container()
 
 # URL for request to backend
-url = 'https://hdd-predicitve-maintenance-api.herokuapp.com/'
+url = 'https://hdd-predicitve-maintenance-api.herokuapp.com/receive_dataframe'
 
 
 def predict_rating(df, url=url):
