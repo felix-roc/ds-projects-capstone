@@ -12,6 +12,10 @@ setup:
 data:
 	python -m src.make_dataset
 
+## Predict on Test Data
+predict:
+	python -m src.predict
+
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete
