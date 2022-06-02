@@ -30,7 +30,7 @@ def __get_model():
     return model
 
 
-def run_predict():
+def run_predict(X_test):
     """Load the test data, preprocess it and run the prediction.
 
     Returns:
@@ -39,7 +39,7 @@ def run_predict():
     logger.info("Loading model")
     model = __get_model()
     logger.info("Loading and preprocessing data")
-    X_test = __get_data()
+    # X_test = __get_data()
     logger.info("Feature engineering on test")
     preprocessor = hdd_preprocessor(days=30, trigger=0.05)
     X_test = preprocessor.fit_transform(X_test)  # Nothing saved in the fit
@@ -57,5 +57,5 @@ if __name__ == "__main__":
     logging.getLogger("pyhive").setLevel(logging.CRITICAL)
     logger.setLevel(logging.INFO)
     df = 1  # supress warnig
-    y_pred = run_predict()
+    y_pred = run_predict(X_test)
     print(y_pred)
