@@ -1,122 +1,59 @@
-import dash
-from dash import dcc
-from dash import html
-import plotly.express as px
-import uvicorn
-
-
-# from dash.dependencies import Input, Output, State
-
 import pandas as pd
+import plotly.express as px
+import dash
+from dash import html, dcc, callback, Output, Input
 
-# from mlflow.sklearn import load_model
-
-
-###############################################################################
-# APP INITIALIZATION
-###############################################################################
+# APP initialization
 app = dash.Dash(__name__)
+server = app.server  # this is needed by gunicorn command in procfile
 
-# this is needed by gunicorn command in procfile
-server = app.server
-
-
-###############################################################################
-# LOAD MODEL AND DATA
-###############################################################################
-# def __get_model():
-#     """Load the saved model for prediction.
-
-#     Returns:
-#         _type_: Model
-#     """
-#     model_path = "models/deployment_ann"
-#     model = load_model(model_path)
-#     return model
-
-
-# def __get_data():
-#     """Load and preprocess sample test dataset.
-
-#     Returns:
-#         _type_: X_test
-#     """
-#     path = "data/processed/"
-#     X_test = pd.read_csv(path + "X_test.csv")
-#     return X_test
-
-
-# def __get_predictions(model, X_test):
-#     """Query predictions
-
-#     Args:
-#         model (_type_): _description_
-#         X_test (_type_): _description_
-
-#     Returns:
-#         _type_: _description_
-#     """
-#     y_proba = model.predict_proba(X_test)
-#     return y_proba
-
-
-# model = __get_model()
-# X_test = __get_data()
-# y_proba = __get_predictions(model, X_test)
-
+# Load data
 path = "data/"
-X_test = pd.read_csv(path + "X_test.csv")
-y_test = pd.read_csv(path + "y_test.csv")
-y_pred = pd.read_csv(path + "y_pred.csv")
-y_pred = 1 - y_pred
+X_test = pd.read_csv(path + "test_data_final.csv")
+y_pred = pd.read_csv(path + "pred_test_data.csv")
+y_pred = y_pred.prediction.astype(bool)
+# Store unique serial numbers and smart numbers that contain values
+serials = X_test.serial_number.unique()
+X_test = X_test.dropna(axis=1)
+smarts = X_test.columns[X_test.columns.str.contains("raw")].to_numpy()
 
-###############################################################################
-# PLOTS
-###############################################################################
+# Initialize figure
+fig = px.scatter(y=X_test.smart_197_raw, color=y_pred)
 
-fig = px.histogram(x=X_test.smart_999, color=y_pred["0"])
-
-
-###############################################################################
-# LAYOUT
-###############################################################################
+# Layout
 app.layout = html.Div(
     [
         html.H2(
             id="title",
             children="Predictive maintenance of HDDs in data centers",
+            style={"textAlign": "center"},
         ),
-        html.Div(id="textarea-state-example-output", style={"whiteSpace": "pre-line"}),
-        dcc.Graph(id="bar-chart", figure=fig),
+        html.H4(id="select_serial", children="Please select one HDD:"),
+        dcc.Dropdown(serials, serials[2], multi=False, id="serial-dropdown"),
+        html.H4(
+            id="select_smart", children="Please select one S.M.A.R.T. feature to plot:"
+        ),
+        dcc.Dropdown(smarts, smarts[18], multi=False, id="smart-dropdown"),
+        html.H4(id="whitespace", children=" "),
+        dcc.Graph(id="chart", figure=fig),
     ]
 )
 
 
-###############################################################################
-# INTERACTION CALLBACKS
-###############################################################################
-# https://dash.plotly.com/basic-callbacks
-# @app.callback(
-#     [
-#         Output("textarea-state-example-output", "children"),
-#         Output("bar-chart", "figure"),
-#     ],
-#     Input("textarea-state-example-button", "n_clicks"),
-#     State("textarea-state-example", "value"),
-# )
-# def update_output(n_clicks, value):
-#     fig = get_figure(X_test.smart_999, y_proba)
-#     if n_clicks > 0:
-#         if 0 < len(value) < 10:
-#             text = "you said: " + value
-#             fig = get_figure(X_test.smart_999, y_proba)
-#             return text, fig
-#         else:
-#             return "Please add a text between 0 and 10 characters!", fig
-#     else:
-#         return "", fig
+@callback(
+    Output("chart", "figure"),
+    [Input("serial-dropdown", "value"), Input("smart-dropdown", "value")],
+)
+def update_graph(serial_selected, smart_selected):
+    data_selected = X_test[X_test.serial_number == serial_selected]
+    pred_selected = y_pred[data_selected.index]
+    fig = px.scatter(
+        y=data_selected[smart_selected],
+        color=pred_selected,
+        labels={"x": "Days", "y": str(smart_selected), "color": "Predicted Failure"},
+    )
+    return fig
 
 
-# Add the server clause:
 if __name__ == "__main__":
     app.run_server()
