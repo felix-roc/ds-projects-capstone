@@ -51,6 +51,7 @@ def update_graph(serial_selected, smart_selected):
         y=data_selected[smart_selected],
         color=pred_selected,
         labels={"x": "Days", "y": str(smart_selected), "color": "Predicted Failure"},
+        template="plotly_white",
     )
     return fig
 
